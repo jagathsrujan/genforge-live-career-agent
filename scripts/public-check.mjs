@@ -84,7 +84,9 @@ for (const file of files) {
   scanFile(file, tracked.includes(file) ? "working tree" : "untracked file");
 }
 
-const history = git(["log", "--all", "--format=", "-p"], true);
+// Scan the checked-out release history. Unmerged Dependabot branches can carry
+// dependency fixtures that are not part of the public release boundary.
+const history = git(["log", "HEAD", "--format=", "-p"], true);
 if (history) scanText("git history", history, "history");
 
 const stagedDiff = git(["diff", "--cached", "--no-ext-diff", "--unified=0"], true);

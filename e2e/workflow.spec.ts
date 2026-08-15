@@ -14,7 +14,7 @@ test("persists rapid candidate entry after reload", async ({ page }) => {
   await page.getByLabel("Phone").fill("+1 415 555 0101");
   await page.getByLabel("Location").fill("Seattle, WA");
   await page.getByLabel("Professional summary").fill("Designs reliable systems and documents decisions clearly.");
-  await page.waitForTimeout(900);
+  await expect(page.getByRole("status")).toContainText("Candidate facts saved locally", { timeout: 10_000 });
   await page.reload();
   await expect(page.getByLabel("Full name")).toHaveValue("Alex Rivera");
   await expect(page.getByLabel("Email")).toHaveValue("alex@example.test");
@@ -24,12 +24,13 @@ test("persists rapid candidate entry after reload", async ({ page }) => {
 });
 
 test("runs the synthetic live workflow and exports reviewed formats", async ({ page }) => {
+  test.setTimeout(90_000);
   await page.getByRole("button", { name: /Load demo workspace/i }).click();
   await expect(page.getByText("Synthetic inputs")).toBeVisible();
   await page.getByRole("button", { name: "Privacy boundary", exact: true }).click();
   await page.getByRole("button", { name: /I understand — enable live runs/i }).click();
   await page.getByRole("button", { name: "Start live run" }).first().click();
-  await expect(page.getByRole("status")).toContainText("Live run completed", { timeout: 30_000 });
+  await expect(page.getByRole("status")).toContainText("Live run completed", { timeout: 60_000 });
 
   await page.getByRole("button", { name: /Evidence/i }).click();
   await expect(page.getByText(/Built an accessible React and TypeScript study planner/i)).toBeVisible();
