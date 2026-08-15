@@ -1,0 +1,4 @@
+SYNTHETIC FIXTURE — NOT A REAL PROJECT NOTE
+
+Atlas is a React and TypeScript study planner for early-career learners.
+Maya Chen designed the information architecture, implemented keyboard navigation, and documented the testing approach.

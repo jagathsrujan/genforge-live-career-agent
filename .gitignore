@@ -1,0 +1,36 @@
+node_modules/
+.pnpm-store/
+.next/
+out/
+coverage/
+*.tsbuildinfo
+
+# Local configuration and credentials. Keep the public template below.
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+*.pfx
+
+# GenForge local state and generated personal artifacts.
+.genforge-data/
+genforge-data/
+.e2e-data/
+attachments/
+runs/
+exports/
+artifacts/generated/
+artifacts/personal/
+personal/
+private/
+
+# Browser/test output and OS files.
+.DS_Store
+playwright-report/
+test-results/
+e2e/artifacts/
+.impeccable/review/
+.cache/
+.tmp/

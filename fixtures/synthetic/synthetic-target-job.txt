@@ -1,0 +1,4 @@
+SYNTHETIC FIXTURE — NOT A REAL JOB POSTING
+
+Northstar Labs is looking for a product-minded frontend engineer intern.
+The role asks for React and TypeScript, accessible interfaces, collaboration with designers, and reliable tests.

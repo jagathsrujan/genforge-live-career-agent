@@ -1,0 +1,49 @@
+{
+  "name": "genforge-live-career-agent",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=20.11.0 <23"
+  },
+  "description": "A local, evidence-backed AI career and resume workspace for GenForge.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "resume": "node ./bin/resume.mjs",
+    "public:check": "node ./scripts/public-check.mjs",
+    "demo:reset": "node ./scripts/reset-demo.mjs",
+    "artifact:generate": "node ./scripts/generate-synthetic-artifact.mjs",
+    "typecheck": "tsc --noEmit",
+    "lint": "node ./scripts/lint.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "e2e": "playwright test"
+  },
+  "bin": {
+    "resume": "./bin/resume.mjs"
+  },
+  "dependencies": {
+    "docx": "^9.5.1",
+    "lucide-react": "^0.468.0",
+    "mammoth": "^1.9.0",
+    "next": "^15.5.0",
+    "pdf-parse": "^1.1.1",
+    "pdfkit": "^0.16.0",
+    "playwright": "^1.53.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.53.0",
+    "@types/node": "^22.15.0",
+    "@types/pdfkit": "^0.13.8",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.8.0",
+    "vitest": "^3.2.0"
+  }
+}
