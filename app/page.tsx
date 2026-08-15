@@ -144,6 +144,7 @@ export default function HomePage() {
     const candidateIsDirty = candidateRevisionRef.current > candidatePersistedRevisionRef.current;
     const resolved = candidateIsDirty && local ? { ...next, candidate: local.candidate } : next;
     workspaceRef.current = resolved;
+    window.localStorage.setItem("genforge.workspaceId", resolved.id);
     setWorkspace(resolved);
     setActiveStage(resolved.stage);
     return resolved;

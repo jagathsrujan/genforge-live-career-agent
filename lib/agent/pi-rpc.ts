@@ -134,7 +134,8 @@ export class PiRpcClient extends EventEmitter {
     const extension = process.env.GENFORGE_PI_EXTENSION || `${process.cwd()}/scripts/genforge-extension.mjs`;
     const args = ["--mode", "rpc", "--no-session", "--no-builtin-tools", "--extension", extension, "--provider", "opencode", "--model", model, "--thinking", thinking];
     const command = process.env.GENFORGE_PI_BIN || "pi";
-    this.child = spawn(command, args, {
+    const isNodeScript = /\.m?js$/i.test(command);
+    this.child = spawn(isNodeScript ? process.execPath : command, isNodeScript ? [command, ...args] : args, {
       env: { ...process.env, PI_CODING_AGENT_DIR: process.env.PI_CODING_AGENT_DIR || path.join(getDataDir(), "pi") },
       stdio: ["pipe", "pipe", "pipe"],
     });

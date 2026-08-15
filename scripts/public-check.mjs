@@ -74,6 +74,13 @@ function scanFile(file, source) {
   scanText(file, bytes.toString("utf8"), source);
 }
 
+function diffContent(diff) {
+  return diff
+    .split("\n")
+    .filter((line) => (line.startsWith("+") || line.startsWith("-")) && !line.startsWith("+++ ") && !line.startsWith("--- "))
+    .join("\n");
+}
+
 const tracked = namesFromGit(["ls-files", "-z"]);
 const staged = namesFromGit(["diff", "--cached", "--name-only", "-z"]);
 const untracked = namesFromGit(["ls-files", "--others", "--exclude-standard", "-z"]);
@@ -87,10 +94,10 @@ for (const file of files) {
 // Scan the checked-out release history. Unmerged Dependabot branches can carry
 // dependency fixtures that are not part of the public release boundary.
 const history = git(["log", "HEAD", "--format=", "-p"], true);
-if (history) scanText("git history", history, "history");
+if (history) scanText("git history", diffContent(history), "history");
 
 const stagedDiff = git(["diff", "--cached", "--no-ext-diff", "--unified=0"], true);
-if (stagedDiff) scanText("staged diff", stagedDiff, "staged");
+if (stagedDiff) scanText("staged diff", diffContent(stagedDiff), "staged");
 
 if (findings.length) {
   console.error("Public repository check failed:");

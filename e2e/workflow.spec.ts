@@ -27,6 +27,7 @@ test("runs the synthetic live workflow and exports reviewed formats", async ({ p
   test.setTimeout(90_000);
   await page.getByRole("button", { name: /Load demo workspace/i }).click();
   await expect(page.getByText("Synthetic inputs")).toBeVisible();
+  await expect.poll(() => page.evaluate(() => window.localStorage.getItem("genforge.workspaceId"))).toMatch(/^workspace_/);
   await page.getByRole("button", { name: "Privacy boundary", exact: true }).click();
   await page.getByRole("button", { name: /I understand — enable live runs/i }).click();
   await page.getByRole("button", { name: "Start live run" }).first().click();
@@ -40,7 +41,15 @@ test("runs the synthetic live workflow and exports reviewed formats", async ({ p
       const payload = await response.json();
       const workspace = payload.workspace;
       const run = workspace?.agentRuns?.find((item: { id: string }) => item.id === workspace.lastRunId);
-      return { workspaceId, status: run?.status, error: run?.error, events: run?.events?.map((event: { type: string; message: string }) => event.type + ": " + event.message) };
+      return {
+        workspaceId,
+        httpStatus: response.status,
+        payloadKeys: Object.keys(payload),
+        workspaceFound: Boolean(workspace),
+        status: run?.status,
+        error: run?.error,
+        events: run?.events?.map((event: { type: string; message: string }) => event.type + ": " + event.message),
+      };
     });
     console.log("Live workflow diagnostics", JSON.stringify(diagnostics));
     throw error;
