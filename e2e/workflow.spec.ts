@@ -30,7 +30,21 @@ test("runs the synthetic live workflow and exports reviewed formats", async ({ p
   await page.getByRole("button", { name: "Privacy boundary", exact: true }).click();
   await page.getByRole("button", { name: /I understand — enable live runs/i }).click();
   await page.getByRole("button", { name: "Start live run" }).first().click();
-  await expect(page.getByRole("status")).toContainText("Live run completed", { timeout: 60_000 });
+  try {
+    await expect(page.getByRole("status")).toContainText("Live run completed", { timeout: 60_000 });
+  } catch (error) {
+    const diagnostics = await page.evaluate(async () => {
+      const workspaceId = window.localStorage.getItem("genforge.workspaceId");
+      if (!workspaceId) return { workspaceId: null };
+      const response = await fetch(`/api/workspaces/${workspaceId}`);
+      const payload = await response.json();
+      const workspace = payload.workspace;
+      const run = workspace?.agentRuns?.find((item: { id: string }) => item.id === workspace.lastRunId);
+      return { workspaceId, status: run?.status, error: run?.error, events: run?.events?.map((event: { type: string; message: string }) => event.type + ": " + event.message) };
+    });
+    console.log("Live workflow diagnostics", JSON.stringify(diagnostics));
+    throw error;
+  }
 
   await page.getByRole("button", { name: /Evidence/i }).click();
   await expect(page.getByText(/Built an accessible React and TypeScript study planner/i)).toBeVisible();
